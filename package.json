@@ -1,0 +1,23 @@
+{
+  "name": "language-haskell-scoped",
+  "main": "./lib/language-haskell-scoped",
+  "version": "0.0.0",
+  "description": "Highlight Haskell symbols in module scope",
+  "keywords": [
+  ],
+  "repository": "https://github.com/atom-haskell/language-haskell-scoped",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.9.9 <2.0.0"
+  },
+  "dependencies": {
+  },
+  "consumedServices": {
+    "haskell-completion-backend": {
+      "versions": {
+        "0.1.0": "consumeCompBack",
+        "^1.0.0": "consumeCompBack"
+      }
+    }
+  }
+}
