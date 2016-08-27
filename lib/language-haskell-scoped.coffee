@@ -1,5 +1,10 @@
 module.exports = SemanticHighlight =
   activate: ->
+    selectors = [
+      '.identifier.haskell'
+      '.entity.name.type.haskell'
+      '.entity.name.tag.haskell'
+    ]
     {CompositeDisposable, Disposable} = require 'atom'
     @resolveCB = null
     @CBPromise = new Promise (resolve) => @resolveCB = resolve
@@ -15,7 +20,7 @@ module.exports = SemanticHighlight =
             sbs = new Set(symbols.map ({qname}) -> qname ? name)
             ev = atom.views.getView(ed)
             hl = ->
-              [].slice.call(ev.rootElement.querySelectorAll('.identifier.haskell,.type.haskell,.tag.haskell'))
+              [].slice.call(ev.rootElement.querySelectorAll(selectors.join(',')))
               .forEach (idel) ->
                 if sbs.has(idel.innerText)
                   idel.classList.add 'known-identifier'
