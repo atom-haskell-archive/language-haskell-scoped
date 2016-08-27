@@ -1,5 +1,7 @@
 # language-haskell-scoped package
 
+**WARNING:** Uses some horrible hacks, so not at all guaranteed to work.
+
 This is an experimental package. Once code is mature enough, it will likely be merged into language-haskell.
 
 Highlight identifiers in current scope in Haskell sources.
