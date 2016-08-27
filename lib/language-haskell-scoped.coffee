@@ -5,11 +5,16 @@ module.exports = SemanticHighlight =
       '.entity.name.type.haskell'
       '.entity.name.tag.haskell'
     ]
+    activationScopes = [
+      'source.haskell'
+      'text.tex.latex.haskell'
+    ]
     {CompositeDisposable, Disposable} = require 'atom'
     @resolveCB = null
     @CBPromise = new Promise (resolve) => @resolveCB = resolve
     @disposables = new CompositeDisposable
     @disposables.add atom.workspace.observeTextEditors (ed) =>
+      return unless ed.getGrammar().scopeName in activationScopes
       @CBPromise.then (cb) =>
         hlcd = null
         highlight = ->
