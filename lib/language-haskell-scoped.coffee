@@ -24,6 +24,7 @@ module.exports = SemanticHighlight =
           .then (symbols) ->
             sbs = new Set(symbols.map ({qname}) -> qname ? name)
             ev = atom.views.getView(ed)
+            return unless ev?.component?
             hl = ->
               [].slice.call(ev.rootElement.querySelectorAll(selectors.join(',')))
               .forEach (idel) ->
@@ -35,10 +36,9 @@ module.exports = SemanticHighlight =
             ev.component.updateSync = ->
               res = ul.apply(this, arguments)
               hl()
-              # console.error "1"
               return res
             hlcd.add new Disposable ->
-              ev.component.updateSync = ul
+              ev.component.updateSync = ul if ev?.component?
             hl()
         @disposables.add ed.onDidStopChanging -> highlight()
         @disposables.add cb.registerCompletionBuffer ed.getBuffer()
