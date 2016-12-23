@@ -1,9 +1,9 @@
 module.exports = SemanticHighlight =
   activate: ->
     selectors = [
-      '.identifier.haskell'
-      '.entity.name.type.haskell'
-      '.entity.name.tag.haskell'
+      '.syntax--identifier.syntax--haskell'
+      '.syntax--entity.syntax--name.syntax--type.syntax--haskell'
+      '.syntax--entity.syntax--name.syntax--tag.syntax--haskell'
     ]
     activationScopes = [
       'source.haskell'
@@ -29,7 +29,7 @@ module.exports = SemanticHighlight =
               [].slice.call(ev.rootElement.querySelectorAll(selectors.join(',')))
               .forEach (idel) ->
                 if sbs.has(idel.innerText)
-                  idel.classList.add 'known-identifier'
+                  idel.classList.add 'syntax--known-identifier'
             # hlcd.add ev.onDidChangeScrollLeft -> hl()
             # hlcd.add ev.onDidChangeScrollTop -> hl()
             ul = ev.component.updateSync
