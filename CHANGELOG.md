@@ -1,3 +1,7 @@
+## 0.0.4
+* Atom 1.13 update
+* Update LICENSE
+
 ## 0.0.3
 * Some hacks to avoid throwing errors
 
