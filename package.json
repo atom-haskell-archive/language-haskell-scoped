@@ -7,7 +7,7 @@
   "repository": "https://github.com/atom-haskell/language-haskell-scoped",
   "license": "MIT",
   "engines": {
-    "atom": ">=1.13.0 <2.0.0"
+    "atom": ">=1.19.0 <2.0.0"
   },
   "dependencies": {},
   "consumedServices": {
