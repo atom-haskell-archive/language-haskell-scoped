@@ -16,5 +16,8 @@
         "^1.0.0": "consumeCompBack"
       }
     }
+  },
+  "devDependencies": {
+    "flow-bin": "^0.51.0"
   }
 }
