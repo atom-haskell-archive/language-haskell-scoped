@@ -63,8 +63,8 @@ export class EditorController {
         this.decorateRange(range, selectors)
       }
     })
-    this.editor.scanInBufferRange(rx.operatorRx, searchRange, async ({match, range}) => {
-      if (sbs.has(`${match[1] || ''}(${match[2] || match[3]})`)) {
+    this.editor.scanInBufferRange(rx.operatorRx, searchRange, async ({matchText, range}) => {
+      if (sbs.has(matchText)) {
         this.decorateRange(range, operatorSelectors)
       }
     })
@@ -76,11 +76,12 @@ export class EditorController {
   }
 
   private async decorateRange (range: Atom.Range, myselectors: string[]) {
-    const inScope =
-      this.editor.scopeDescriptorForBufferPosition(range.start).getScopesArray()
-      .some((sel) => myselectors.includes(sel))
+    const [inScope] = this.editor
+      .scopeDescriptorForBufferPosition(range.start).getScopesArray()
+      .filter((sel) => myselectors.includes(sel))
     if (inScope) {
-      const marker = this.layer.markBufferRange(range, {invalidate: 'never'})
+      const srange = this.editor.bufferRangeForScopeAtPosition(inScope, range.start)
+      const marker = this.layer.markBufferRange(srange || range, {invalidate: 'never'})
       this.editor.decorateMarker(marker, {type: 'text', class: knownIdentClass})
     }
   }

@@ -6,5 +6,5 @@ const className = `${classNameOne}(?:\\.${classNameOne})*`
 const modulePrefix = `(?:${className}\\.)?`
 const operatorChar = '(?:(?![(),;\\[\\]`{}_"\'])[\\p{S}\\p{P}])'
 const operator = `${operatorChar}+`
-export const identRx = XRegExp(`(${modulePrefix})(${identCharClass}*)$`, 'u')
-export const operatorRx = XRegExp(`(${modulePrefix})(${operator})$`, 'u')
+export const identRx = XRegExp(`(${modulePrefix})(${identCharClass}*)`, 'gu')
+export const operatorRx = XRegExp(`(${modulePrefix})(${operator})`, 'gu')
