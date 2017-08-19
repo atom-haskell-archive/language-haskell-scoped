@@ -1,3 +1,8 @@
+## 0.1.0
+* Rewrite in TypeScript
+* XRegExp regexps (Unicode support!)
+* Transition to atom 1.19 text decorations
+
 ## 0.0.4
 * Atom 1.13 update
 * Update LICENSE
