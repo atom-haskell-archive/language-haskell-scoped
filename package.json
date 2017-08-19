@@ -9,7 +9,9 @@
   "engines": {
     "atom": ">=1.19.0 <2.0.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "xregexp": "^3.2.0"
+  },
   "consumedServices": {
     "haskell-completion-backend": {
       "versions": {
@@ -18,6 +20,6 @@
     }
   },
   "devDependencies": {
-    "flow-bin": "^0.51.0"
+    "@types/xregexp": "^3.0.29"
   }
 }
