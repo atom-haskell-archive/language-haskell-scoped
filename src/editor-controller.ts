@@ -29,12 +29,13 @@ export class EditorController {
     this.disposables.add(this.editor.getBuffer().onDidChangeText(async ({ changes }) => {
       const sbs = await this.getSymbols()
       for (const { newRange } of changes) {
-        this.updateHighlightInRange(sbs, [[newRange.start.row, 0], [newRange.end.row + 1, 0]])
+        await this.updateHighlightInRange(sbs, [[newRange.start.row, 0], [newRange.end.row + 1, 0]])
       }
     }))
     this.disposables.add(editor.onDidDestroy(() => {
       this.dispose()
     }))
+    // tslint:disable-next-line:no-floating-promises
     this.init()
   }
 
@@ -51,7 +52,7 @@ export class EditorController {
   }
 
   private async init() {
-    this.updateHighlightInRange(await this.getSymbols(), this.editor.getBuffer().getRange())
+    await this.updateHighlightInRange(await this.getSymbols(), this.editor.getBuffer().getRange())
   }
 
   private async updateHighlightInRange(sbs: Set<string>, searchRange: Atom.IRange) {
@@ -60,12 +61,12 @@ export class EditorController {
     }
     this.editor.scanInBufferRange(rx.identRx, searchRange, async ({ matchText, range }) => {
       if (sbs.has(matchText)) {
-        this.decorateRange(range, selectors)
+        await this.decorateRange(range, selectors)
       }
     })
     this.editor.scanInBufferRange(rx.operatorRx, searchRange, async ({ matchText, range }) => {
       if (sbs.has(matchText)) {
-        this.decorateRange(range, operatorSelectors)
+        await this.decorateRange(range, operatorSelectors)
       }
     })
   }
