@@ -1,4 +1,4 @@
-# language-haskell-scoped package
+# language-haskell-scoped package ![](https://david-dm.org/atom-haskell/language-haskell-scoped.svg)
 
 **WARNING:** Uses some horrible hacks, so not at all guaranteed to work.
 
