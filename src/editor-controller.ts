@@ -25,14 +25,8 @@ export class EditorController {
   constructor(private editor: Atom.TextEditor, private cb: ICompletionBackend) {
     this.layer = this.editor.addMarkerLayer()
     this.disposables.add(
-      this.editor.getBuffer().onDidChangeText(async ({ changes }) => {
-        const sbs = await this.getSymbols()
-        for (const { newRange } of changes) {
-          await this.updateHighlightInRange(sbs, [
-            [newRange.start.row, 0],
-            [newRange.end.row + 1, 0],
-          ])
-        }
+      this.editor.getBuffer().onDidChangeText((arg) => {
+        handlePromise(this.didChangeText(arg))
       }),
     )
     this.disposables.add(
@@ -57,13 +51,23 @@ export class EditorController {
   }
 
   private async init() {
-    await this.updateHighlightInRange(
+    this.updateHighlightInRange(
       await this.getSymbols(),
       this.editor.getBuffer().getRange(),
     )
   }
 
-  private async updateHighlightInRange(
+  private async didChangeText({ changes }: Atom.BufferStoppedChangingEvent) {
+    const buffer = this.editor.getBuffer()
+    const sbs = await this.getSymbols()
+    for (const { newRange, oldRange } of changes) {
+      for (const row of newRange.union(oldRange).getRows()) {
+        this.updateHighlightInRange(sbs, buffer.rangeForRow(row))
+      }
+    }
+  }
+
+  private updateHighlightInRange(
     sbs: Set<string>,
     searchRange: Atom.RangeCompatible,
   ) {
@@ -72,23 +76,27 @@ export class EditorController {
     })) {
       marker.destroy()
     }
-    this.editor.scanInBufferRange(
-      rx.identRx,
-      searchRange,
-      async ({ matchText, range }) => {
-        if (sbs.has(matchText)) {
-          await this.decorateRange(range, selectors)
+    const buffer = this.editor.getBuffer()
+    const range = Atom.Range.fromObject(searchRange)
+
+    const decorate = (idents: Atom.RangeLike[], selectors: string[]) => {
+      for (const ident of idents) {
+        if (sbs.has(buffer.getTextInRange(ident))) {
+          this.decorateRange(ident, selectors)
         }
-      },
+      }
+    }
+
+    handlePromise(
+      buffer
+        .findAllInRange(rx.identRx, range)
+        .then((idents) => decorate(idents, selectors)),
     )
-    this.editor.scanInBufferRange(
-      rx.operatorRx,
-      searchRange,
-      async ({ matchText, range }) => {
-        if (sbs.has(matchText)) {
-          await this.decorateRange(range, operatorSelectors)
-        }
-      },
+
+    handlePromise(
+      buffer
+        .findAllInRange(rx.operatorRx, range)
+        .then((ops) => decorate(ops, operatorSelectors)),
     )
   }
 
@@ -101,7 +109,7 @@ export class EditorController {
     return new Set(symbols.map(({ qname }) => qname))
   }
 
-  private async decorateRange(range: Atom.Range, myselectors: string[]) {
+  private decorateRange(range: Atom.RangeLike, myselectors: string[]) {
     const [inScope] = this.editor
       .scopeDescriptorForBufferPosition(range.start)
       .getScopesArray()
@@ -121,4 +129,17 @@ export class EditorController {
       })
     }
   }
+}
+
+function handlePromise(p: Promise<void>): void {
+  p.catch(function(e: Error) {
+    atom.notifications.addError(
+      `Something went wrong in language-haskell-scoped: ${e.name}`,
+      {
+        detail: e.message,
+        stack: e.stack,
+        dismissable: true,
+      },
+    )
+  })
 }
