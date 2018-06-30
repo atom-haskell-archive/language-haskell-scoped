@@ -1,3 +1,9 @@
+## 0.1.1
+
+-   Identifiers can't be empty
+-   Make code more asynchronous; fight againts lockups
+-   Cleanup and updates
+
 ## 0.1.0
 * Rewrite in TypeScript
 * XRegExp regexps (Unicode support!)
