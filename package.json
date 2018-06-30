@@ -7,10 +7,10 @@
   "repository": "https://github.com/atom-haskell/language-haskell-scoped",
   "license": "MIT",
   "engines": {
-    "atom": ">=1.19.0 <2.0.0"
+    "atom": ">=1.27.0 <2.0.0"
   },
   "dependencies": {
-    "xregexp": "^3.2.0"
+    "xregexp": "^4.2.0"
   },
   "consumedServices": {
     "haskell-completion-backend": {
@@ -20,9 +20,11 @@
     }
   },
   "devDependencies": {
+    "@types/atom": "^1.28.0",
     "@types/xregexp": "^3.0.29",
-    "atom-haskell-tslint-rules": "0.0.7",
-    "tslint": "^5.6.0",
-    "typescript": "^2.4.2"
+    "atom-haskell-tslint-rules": "0.2.2",
+    "prettier": "^1.13.7",
+    "tslint": "^5.10.0",
+    "typescript": "^2.9.2"
   }
 }
