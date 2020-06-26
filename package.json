@@ -1,7 +1,7 @@
 {
   "name": "language-haskell-scoped",
   "main": "./lib/language-haskell-scoped",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Highlight Haskell symbols in module scope",
   "keywords": [],
   "repository": "https://github.com/atom-haskell/language-haskell-scoped",
