@@ -3,12 +3,13 @@ import { EditorController } from './editor-controller'
 import { ICompletionBackend } from 'atom-haskell-upi/completion-backend'
 
 let resolveCB: ((val: ICompletionBackend) => void) | undefined
-let cbPromise: Promise<ICompletionBackend> | undefined
 let disposables: Atom.CompositeDisposable | undefined
 
 export function activate() {
   resolveCB = undefined
-  const bprom = (cbPromise = new Promise((resolve) => (resolveCB = resolve)))
+  const bprom = new Promise<ICompletionBackend>(
+    (resolve) => (resolveCB = resolve),
+  )
   const bdisp = (disposables = new Atom.CompositeDisposable())
   disposables.add(
     atom.workspace.observeTextEditors(async (ed) => {
@@ -21,7 +22,6 @@ export function activate() {
 
 export function deactivate() {
   resolveCB = undefined
-  cbPromise = undefined
   disposables && disposables.dispose()
   disposables = undefined
 }
